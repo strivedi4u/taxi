@@ -1,38 +1,21 @@
-.container-t button {
-    width: 48%;
-    padding: 10px;
-    border: none;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-button#acceptButton {
-    background-color: #28a745;
-}
-
-button#viewButton {
-    background-color: #dc3545;
-}
-.card-header{
+/* .card-header{
     background-color: #007bff;
     color: #070707;
     padding: 0.75rem 1.25rem;
     border-bottom: 1px solid #dee2e6;
     font-size: 1.25rem;
 }
-.txtLabel{
-    margin-right: 20px;
+.left-side{
+    color: ;
 }
-.ride-card-t .templatemo-blue-button{
+.left-side .templatemo-blue-button{
   width: 100px;
 }
-.ride-card-t .form-group{
+.left-side-t .form-group{
     display: flex;
     gap: 20px; 
 }
-.ride-card-t .label{
+.left-side-t .label{
     color:  black;
 }
  .card-header {
@@ -43,43 +26,43 @@ button#viewButton {
     font-size: 1.25rem;
 }
 
-.ride-card-t .card-body {
+.left-side .card-body {
     padding: 1.25rem;
 }
 
-.ride-card-t .card-title {
+.left-side .card-title {
     font-size: 1.5rem;
     margin-bottom: 0.75rem;
 }
 
-.ride-card-t .card-text {
+.left-side .card-text {
     margin-bottom: 1.25rem;
     line-height: 1.5;
     color: black;
 }
-.ride-card-t .row {
+.left-side .row {
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.5rem;
 }
 
-.ride-card-t .column {
+.left-side .column {
     flex: 1;
     text-wrap: nowrap;
     padding: 0 0.9rem;
 }
 
-.ride-card-t  .label {
+.left-side  .label {
     font-weight: bold;
 }
 
-.ride-card-t  .value {
+.left-side  .value {
     margin-left: 0.5rem;
 }
 
-.ride-card-t .bold {
+.left-side .bold {
     font-weight: bold;
-} 
+}  */
 
 
 /* * {

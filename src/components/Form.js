@@ -47,6 +47,7 @@ const Form = () => {
     <div className="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
     <div className="container">
       <div className="row">
+
       
     <div className="expense-form">
       <div className="form-container">
@@ -65,7 +66,7 @@ const Form = () => {
             <form>
               <div className="form-group">
                 <label htmlFor="expenseType">Shashank </label>
-                <select id="expenseType" value={formData.expenseType} onChange={handleInputChange}>
+                <select id="expenseType" className='select-t' value={formData.expenseType} onChange={handleInputChange}>
                   <option value="">----Select Appropriate Transaction Type----</option>
                   <option value="Travel">Travel</option>
                   <option value="Food">Food</option>
@@ -76,7 +77,7 @@ const Form = () => {
 
               <div className="form-group">
                 <label htmlFor="amount">Amount</label>
-                <input
+                <input className='input-t'
                   type="number"
                   id="amount"
                   value={formData.amount}
@@ -88,7 +89,7 @@ const Form = () => {
 
               <div className="form-group">
                 <label htmlFor="currency">Currency</label>
-                <select id="currency" value={formData.currency} onChange={handleInputChange}>
+                <select id="currency" className='select-t' value={formData.currency} onChange={handleInputChange}>
                   <option value="INR">INR - Indian Rupee</option>
                   <option value="USD">USD - US Dollar</option>
                   <option value="EUR">EUR - Euro</option>
@@ -101,7 +102,7 @@ const Form = () => {
                 <label htmlFor="dateOfExpense">Date of Expense</label>
                 <input
                   type="date"
-                  id="dateOfExpense"
+                  id="dateOfExpense" className='input-t'
                   value={formData.dateOfExpense}
                   onChange={handleInputChange}
                   required
@@ -112,7 +113,7 @@ const Form = () => {
                 <label htmlFor="timeOfExpense">Time of Expense</label>
                 <input
                   type="time"
-                  id="timeOfExpense"
+                  id="timeOfExpense" className='input-t'
                   value={formData.timeOfExpense}
                   onChange={handleInputChange}
                   required
@@ -123,7 +124,7 @@ const Form = () => {
                 <label htmlFor="timeOfExpense">Time of Expense</label>
                 <input
                   type="time"
-                  id="timeOfExpense"
+                  id="timeOfExpense" className='input-t'
                   value={formData.timeOfExpense}
                   onChange={handleInputChange}
                   required

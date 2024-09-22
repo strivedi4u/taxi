@@ -1,5 +1,6 @@
 import React from 'react';
 import taxi from '../assets/images/taxi.png';
+
  // Add any necessary CSS file for styles
 
 const MainContent = () => {
