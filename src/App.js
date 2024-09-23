@@ -11,6 +11,7 @@ import Map from './components/Map';
 import Form from './components/Form';
 import Request from './components/Request';
 import View from './pages/View';
+import View1 from './pages/View1';
 import Profile from './pages/Profile';
 import GBooking from './pages/GBooking';
 import MBooking from './pages/MBooking';
@@ -31,6 +32,7 @@ const App = () => {
           <Route exact path="/form" element={<Form />} />
           <Route exact path="/request" element={<Request />} />
           <Route exact path="/view" element={<View />} />
+          <Route exact path="/view1" element={<View1 />} />
         </Routes>
       </BrowserRouter>
 
