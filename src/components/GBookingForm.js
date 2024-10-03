@@ -20,14 +20,25 @@ const GBookingForm = (props) => {
     });
 
     const [currentSection, setCurrentSection] = useState(1);
+    var [statusCount, setStatusCount] = useState(0);
+
+
+    const handleStatusCount = (e) => {
+        console.log(statusCount);
+        console.log("Before");
+        setStatusCount(++statusCount);
+        console.log("After");
+        console.log(statusCount);
+    };
 
     const handleInputChange = (e) => {
         const { id, value } = e.target;
         setFormData({ ...formData, [id]: value });
     };
 
-    const handleNextSection = () => {
+    const handleNextSection = (e) => {
         setCurrentSection(currentSection + 1);
+        handleStatusCount();
     };
 
     const handleReset = () => {
@@ -59,7 +70,7 @@ const GBookingForm = (props) => {
 
                     <div className="expense-form">
                         <div className="form-container">
-                            
+
                             <div className="left-side">
                                 <img src={taxi} style={{ marginTop: -50 }} alt="team meeting" />
                             </div>
@@ -122,7 +133,7 @@ const GBookingForm = (props) => {
 
                                         </div>
 
-                                        <div className="form-group">
+                                        {/* <div className="form-group">
                                             <label htmlFor="currency">Date of Travel *</label>
                                             <input
                                                 type="date"
@@ -131,88 +142,7 @@ const GBookingForm = (props) => {
                                                 onChange={handleInputChange}
                                                 required
                                             />
-                                        </div>
-
-
-                                        <div className="form-test">
-                                            <div className="form-group-t">
-                                                <label htmlFor="timeOfExpense">Departure Time *</label>
-                                                <input
-                                                    type="time"
-                                                    id="timeOfExpense" className='input-t'
-                                                    value={formData.timeOfExpense}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                />
-
-                                            </div>
-                                            <div className="form-group-t">
-                                                <label htmlFor="timeOfExpense">Arrival Time *</label>
-                                                <input
-                                                    type="time"
-                                                    id="timeOfExpense" className='input-t'
-                                                    value={formData.timeOfExpense}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                />
-                                            </div>
-
-
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="amount">Purpose of Visit *</label>
-                                            <input className='input-t'
-                                                type="text"
-                                                id="amount"
-                                                value={formData.amount}
-                                                onChange={handleInputChange}
-                                                placeholder="e.g. Business Meeting"
-                                                required
-                                            />
-                                        </div>
-
-
-                                        <div className="button-group">
-                                            <button type="button" id='successButton' onClick={handleNextSection}>
-                                                Next
-                                            </button>
-                                            <button type="button" id='cancelButton' onClick={handleReset}>
-                                                Clear
-                                            </button>
-                                        </div>
-                                    </form>
-                                )}
-
-                                {/* Section 2 */}
-                                {currentSection === 2 && (
-                                    <form>
-                                        <div className="form-test">
-                                            <div className="form-group-t">
-                                                <label htmlFor="timeOfExpense">Guest Name *</label>
-                                                <input
-                                                    type="text"
-                                                    id="timeOfExpense" className='input-t'
-                                                    placeholder="e.g. Shashank Trivedi"
-                                                    value={formData.timeOfExpense}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                />
-
-                                            </div>
-                                            <div className="form-group-t">
-                                                <label htmlFor="timeOfExpense">Guset Mobile No. *</label>
-                                                <input
-                                                    type="text"
-                                                    id="timeOfExpense" className='input-t'
-                                                    placeholder="e.g. 8005205383"
-                                                    value={formData.timeOfExpense}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
-
-
+                                        </div> */}
                                         <div className="form-test">
                                             <div className="form-group-t">
                                                 <label htmlFor="timeOfExpense">Choose Taxi *</label>
@@ -252,14 +182,12 @@ const GBookingForm = (props) => {
                                             />
                                         </div>
 
-
                                         <div className="form-test">
                                             <div className="form-group-t">
-                                                <label htmlFor="timeOfExpense">Co-Passenger Name</label>
+                                                <label htmlFor="timeOfExpense">Departure Time *</label>
                                                 <input
-                                                    type="text"
+                                                    type="datetime-local"
                                                     id="timeOfExpense" className='input-t'
-                                                    placeholder="e.g. Jigyasu"
                                                     value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
@@ -267,11 +195,10 @@ const GBookingForm = (props) => {
 
                                             </div>
                                             <div className="form-group-t">
-                                                <label htmlFor="timeOfExpense">Co-Passenger Mobile No.</label>
+                                                <label htmlFor="timeOfExpense">Arrival Time *</label>
                                                 <input
-                                                    type="number"
+                                                    type="datetime-local"
                                                     id="timeOfExpense" className='input-t'
-                                                    placeholder="e.g. 1234567890"
                                                     value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
@@ -280,19 +207,102 @@ const GBookingForm = (props) => {
 
 
                                         </div>
-
+                                        <div className="form-group">
+                                            <label htmlFor="amount">Purpose of Visit *</label>
+                                            <input className='input-t'
+                                                type="text"
+                                                id="amount"
+                                                value={formData.amount}
+                                                onChange={handleInputChange}
+                                                placeholder="e.g. Business Meeting"
+                                                required
+                                            />
+                                        </div>
 
 
                                         <div className="button-group">
-                                            <button type="button" id='successButton' onClick={handleSubmit}>
+                                            <button type="button" id='successButton' onClick={handleNextSection}>
                                                 Submit
                                             </button>
-                                            <button type="button" id='cancelButton' onClick={handleReset}>
-                                                Back
+                                            <button type="button" id="addButton" onClick={handleNextSection}>
+                                                Add Passenger
+                                            </button>
+
+                                        </div>
+                                    </form>
+                                )}
+
+                                {/* Section 2 */}
+                                {currentSection === 2 && (
+                                    <form>
+                                        {Array.from({ length: statusCount }, (_, index) => (
+                                            <div key={index}>
+                                            <div className="form-test" >
+                                                <div className="form-group-t">
+                                                    <label htmlFor={`staffNo-${index}`}>Staff No. *</label>
+                                                    <input
+                                                        type="text"
+                                                        id={`staffNo-${index}`}
+                                                        className="input-t"
+                                                        placeholder="e.g. Shashank Trivedi"
+                                                        value={formData[`staffNo-${index}`] || ''}
+                                                        onChange={(e) => handleInputChange(e, index, 'staffNo')}
+                                                        required
+                                                    />
+                                                </div>
+                                                <div className="form-group-t">
+                                                    <label htmlFor={`employeeName-${index}`}>Employee Name *</label>
+                                                    <input
+                                                        type="text"
+                                                        id={`employeeName-${index}`}
+                                                        className="input-t"
+                                                        placeholder="e.g. 8005205383"
+                                                        value={formData[`employeeName-${index}`] || ''}
+                                                        onChange={(e) => handleInputChange(e, index, 'employeeName')}
+                                                        required
+                                                    />
+                                                </div>
+                                                </div>
+                                                <div className="form-test">
+                                                <div className="form-group-t">
+                                                    <label htmlFor={`destination-${index}`}>Destination</label>
+                                                    <input
+                                                        type="text"
+                                                        id={`destination-${index}`}
+                                                        className="input-t"
+                                                        placeholder="e.g. Jigyasu"
+                                                        value={formData[`destination-${index}`] || ''}
+                                                        onChange={(e) => handleInputChange(e, index, 'destination')}
+                                                        required
+                                                    />
+                                                </div>
+                                                <div className="form-group-t">
+                                                    <label htmlFor={`mobileNo-${index}`}>Mobile No.</label>
+                                                    <input
+                                                        type="number"
+                                                        id={`mobileNo-${index}`}
+                                                        className="input-t"
+                                                        placeholder="e.g. 1234567890"
+                                                        value={formData[`mobileNo-${index}`] || ''}
+                                                        onChange={(e) => handleInputChange(e, index, 'mobileNo')}
+                                                        required
+                                                    />
+                                                </div>
+                                                </div>
+                                                </div>
+                                        ))}
+
+                                        <div className="button-group">
+                                            <button type="button" id="successButton" onClick={handleSubmit}>
+                                                Submit
+                                            </button>
+                                            <button type="button" id="addButton" onClick={handleStatusCount}>
+                                                Add More Passenger
                                             </button>
                                         </div>
                                     </form>
                                 )}
+
                             </div>
                         </div>
                     </div></div></div></div>

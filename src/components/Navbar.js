@@ -1,11 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../assets/css/navbar.css';
 import logo from '../assets/images/logo.jpg';
+import axios from 'axios';
 const Navbar = (props) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const toggleNavbar = () => {
         setIsCollapsed(!isCollapsed);
     };
+    useEffect(() => {
+    const fetchData = async () => {
+        const apiUrl = process.env.REACT_APP_API_URL;
+        console.log('API URL:', apiUrl);
+        try {
+          const response = await axios.post(
+            process.env.REACT_APP_API_URL + '/hrassist/api/Services/GetEmplyeeProfile',
+        // Replace with your API endpoint
+            {
+              body: localStorage.getItem('UserName'),  // This is the body parameter you're passing
+            },
+            {
+              headers: {
+                'Authorization': localStorage.getItem('authToken'),  // Authorization header with token
+                'Content-Type': 'application/json',  // Adjust headers as needed
+              },
+            }
+          );
+          console.log(response.data);
+        } catch (err) {
+          console.error("API call error:", err);
+        }
+      };
+  
+      // Only call fetchData if the parameter is available
+    //   if (parameter) {
+         fetchData();
+    //   }
+    }, []);  
+
+
 
     return (
 
