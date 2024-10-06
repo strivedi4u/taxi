@@ -8,40 +8,40 @@ const Navbar = (props) => {
         setIsCollapsed(!isCollapsed);
     };
     useEffect(() => {
-    const fetchData = async () => {
-        const apiUrl = process.env.REACT_APP_API_URL;
-        console.log('API URL:', apiUrl);
-        try {
-          const response = await axios.post(
-            process.env.REACT_APP_API_URL + '/hrassist/api/Services/GetEmplyeeProfile',
-        // Replace with your API endpoint
-            {
-              body: localStorage.getItem('UserName'),  // This is the body parameter you're passing
-            },
-            {
-              headers: {
-                'Authorization': localStorage.getItem('authToken'),  // Authorization header with token
-                'Content-Type': 'application/json',  // Adjust headers as needed
-              },
+        const fetchData = async () => {
+            const apiUrl = process.env.REACT_APP_API_URL;
+            console.log('API URL:', apiUrl);
+            try {
+                const response = await axios.post(
+                    process.env.REACT_APP_API_URL + '/hrassist/api/Services/GetEmplyeeProfile',
+                    // Replace with your API endpoint
+                    {
+                        body: localStorage.getItem('UserName'),  // This is the body parameter you're passing
+                    },
+                    {
+                        headers: {
+                            'Authorization': localStorage.getItem('authToken'),  // Authorization header with token
+                            'Content-Type': 'application/json',  // Adjust headers as needed
+                        },
+                    }
+                );
+                console.log(response.data);
+            } catch (err) {
+                console.error("API call error:", err);
             }
-          );
-          console.log(response.data);
-        } catch (err) {
-          console.error("API call error:", err);
-        }
-      };
-  
-      // Only call fetchData if the parameter is available
-    //   if (parameter) {
-         fetchData();
-    //   }
-    }, []);  
+        };
+
+        // Only call fetchData if the parameter is available
+        //   if (parameter) {
+        fetchData();
+        //   }
+    }, []);
 
 
 
     return (
 
-        <nav className="navbar">
+        <nav className="navbar wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
             <div className="navbar-header">
                 <a className="navbar-brand" href="#">
                     <span><img src={logo} /></span><span>&nbsp;&nbsp;&nbsp;Taxi Rental<b> System</b></span>
@@ -63,27 +63,26 @@ const Navbar = (props) => {
             <div id="navbarCollapse" className={`collapse navbar-collapse ${!isCollapsed ? 'in' : ''}`}>
                 <ul className="nav navbar-nav">
                     <li className={props.home}><a href="/">Home</a></li>
-                    <li className={props.gbooking}><a href="/gbook">Guest Booking</a></li>
-                    <li className={props.mbooking}><a href="/mbook">MSIL Booking</a></li>
+
+                    <li className="dropdown">
+                        <a
+                            data-toggle="dropdown"
+                            className="dropdown-toggle"
+                            href="#"
+                        >
+                            Booking <b className="caret"></b>
+                        </a>
+                        <ul className="dropdown-menu">
+                            <li className={props.mbooking}><a href="/mbook">Self Booking</a></li>
+                            <li className={props.gbooking}><a href="/gbook">On Behalf Booking</a></li>
+                            <li className={props.gbooking}><a href="/gbook">Guest Booking</a></li>
+                        </ul>
+                    </li>
                     <li className={props.vrequest}><a href="/vrequest">View Request</a></li>
                     <li className={props.uManuals}><a href="/">User Manuals</a></li>
-                    {/* <li className="dropdown">
-            <a 
-              data-toggle="dropdown" 
-              className="dropdown-toggle" 
-              href="#"
-            >
-              MSIL Booking <b className="caret"></b>
-            </a>
-            <ul className="dropdown-menu">
-              <li><a href="#"></a></li>
-              <li><a href="#">Web Development</a></li>
-              <li><a href="#">Graphic Design</a></li>
-              <li><a href="#">Digital Marketing</a></li>
-            </ul>
-          </li>
-          <li><a href="#">Blog</a></li>
-          <li><a href="#">Contact</a></li> */}
+
+                    {/* <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li> */}
                 </ul>
 
                 {/* <form className="navbar-form form-inline">

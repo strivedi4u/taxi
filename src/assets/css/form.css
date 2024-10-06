@@ -4,18 +4,105 @@
     padding: 0;
 } */
 
+  
+
+  .animation-container-form {
+    /* padding-top: 50px; */
+    /* margin-top: 20px; */
+   /* Set the desired width */
+ /* size: 500px; */
+ height: 400px;
+margin-top: 20px;
+ /* Ensures any overflow is hidden */
+          /* Full height of the viewport */
+ /* Slightly transparent white background */
+           /* Enables flexbox */
+ justify-content: center;  /* Centers content horizontally */
+ align-items: center;   
+  }
 .section-2 {
     display: none;
 }
-
+.ani{
+padding-top: 60px;
+}
 /* .show {
     display: block !important;
 } */
 
 input:read-only {
-  background-color: #ddd;
+    background-color: #ddd;
 }
 
+.title-form {
+    display: flex;
+    /* Use flexbox */
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* Center vertically */
+    font-size: 12px;
+    margin: -20px -20px 0 -20px;
+    padding: 0;
+    /* padding: 10px 0 0 0; */
+    background-color: #ffffff;
+    /* F6EB61 */
+    /* height: 100vh;   */
+}
+
+.span-form {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    width: 50%;
+    /* background-color: red; */
+
+    /* Use flexbox */
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* Center vertically */
+}
+
+.span1 {
+    background-color: #F6EB61;
+    cursor: pointer;
+    /* 36d039; */
+    width: 33%;
+    height: 40px;
+    display: flex;
+    /* Use flexbox */
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+}
+
+.span2 {
+    background-color: #ffffff;
+    cursor: pointer;
+    width: 34%;
+    display: flex;
+    height: 40px;
+    /* Use flexbox */
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+}
+
+.span3 {
+    background-color: #ffffff;
+    cursor: pointer;
+    width: 33%;
+    display: flex;
+    /* Use flexbox */
+    justify-content: center;
+    height: 40px;
+    /* Center horizontally */
+    align-items: center;
+}
+.dropdown-toggle{
+    display: flex;
+}
 
 .expense-form {
     /* font-family: Arial, sans-serif;
@@ -25,8 +112,8 @@ input:read-only {
     align-items: center;
     height: 100vh; */
     /* ----------- */
-    margin-top: -50px;
-    background-color: white;
+    margin-top: -100px;
+    background-color: rgb(251, 246, 246, 0.7);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -44,7 +131,12 @@ h2 {
     justify-content: space-between;
 }
 
-.left-side, .right-side {
+.passenger {
+    background-color: #28a745;
+}
+
+.left-side,
+.right-side {
     width: 48%;
 }
 
@@ -86,17 +178,20 @@ input[type="file"] {
 
 .form-group {
     margin-bottom: 15px;
-    
 }
+
 .form-group-t {
+  
     margin-bottom: 15px;
     width: 265px;
-    
+
 }
+
 .form-test {
     display: flex;
     justify-content: space-between;
 }
+
 label {
     display: block;
     margin-bottom: 5px;
@@ -104,7 +199,8 @@ label {
     color: #333;
 }
 
-input, select {
+input,
+select {
     /* width: 100%; */
     padding: 10px;
     border: 1px solid #ccc;
@@ -112,9 +208,12 @@ input, select {
     font-size: 16px;
     outline: none;
 }
-.input-t, .select-t {
- width: 100%;
+
+.input-t,
+.select-t {
+    width: 100%;
 }
+
 .button-group button {
     width: 48%;
     padding: 10px;
@@ -124,6 +223,7 @@ input, select {
     cursor: pointer;
     font-size: 16px;
 }
+
 button#successButton {
     background-color: #28a745;
 }

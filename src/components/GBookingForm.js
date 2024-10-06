@@ -1,11 +1,31 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import '../assets/css/form.css';
 import taxi from '../assets/images/taxi.png';
 
 const GBookingForm = (props) => {
     const navigate = useNavigate();
+    const [passengers, setPassengers] = useState([]);
+    console.log(passengers)
+    console.log(passengers.length)
+    const [currentSection, setCurrentSection] = useState(1);
+
+    // Function to handle adding a new passenger
+    const addPassenger = () => {
+        setPassengers(prevPassengers => [
+            ...prevPassengers,
+            { passengerNumber: prevPassengers.length + 1 }
+        ]);
+    };
+
+    const handleSetSection = (e) => {
+        // e.preventDefault(); 
+        setCurrentSection(e);
+    };
+
+
 
     const [formData, setFormData] = useState({
         expenseType: '',
@@ -19,7 +39,7 @@ const GBookingForm = (props) => {
         timeOfExpense: '',
     });
 
-    const [currentSection, setCurrentSection] = useState(1);
+
     var [statusCount, setStatusCount] = useState(0);
 
 
@@ -63,22 +83,173 @@ const GBookingForm = (props) => {
 
 
     return (
-        <div className="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
+        <div className="main-banner wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.25s">
             <div className="container">
                 <div className="row">
 
 
                     <div className="expense-form">
+                        <div className="title-form wow fadeInDown" data-wow-duration="2s" data-wow-delay="2.4s">
+                            <span className="span-form"> <h4>Guest Taxi Booking </h4></span>
+                            <span className='span-form'>
+                                <span className='span1' onClick={() => handleSetSection(1)}>
+                                    <i className="material-icons">person</i>&nbsp; Personal Details &nbsp;
+                                    <i className="material-icons" style={{ fontSize: 15 }}>arrow_forward_ios</i>
+                                </span>
+                                <span className='span2' onClick={() => handleSetSection(2)}>  <i className="material-icons">directions_car</i>&nbsp; Travel Details &nbsp;
+                                    <i className="material-icons" style={{ fontSize: 15 }}>arrow_forward_ios</i></span>
+                                <span className='dropdown span3' onClick={() => handleSetSection(3)}>
+
+
+                                    {/* <li className="dropdown"> */}
+                                    <span
+                                        data-toggle="dropdown"
+                                        className="dropdown-toggle"
+
+                                    >
+                                        <i className="material-icons" >  person_add</i>
+                                        <span style={{ marginTop: 3.5 }}>   &nbsp; Passenger Details &nbsp; </span><span className="caret" style={{ marginTop: 11 }}></span> &nbsp;
+                                    </span>
+
+                                    <ul className="dropdown-menu" style={{ marginLeft: 12 }}>
+                                        <li className={props.mbooking} onClick={addPassenger}><a style={{ display: 'flex' }}> <span style={{ marginTop: 0, fontSize: 12 }}>Add Passenger &nbsp;&nbsp; &nbsp; &nbsp;  </span>
+                                            <i className="material-icons" style={{ fontSize: 18 }}>  add_circle</i></a></li>
+
+
+                                        {/* <li className={props.mbooking} ><a href="/mbook" style={{ display: 'flex' }}> <span style={{ marginTop: 0, marginRight: -2, fontSize: 12 }}>Passenger : 1&nbsp;&nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  </span>
+                                            <i className="material-icons" style={{ fontSize: 18 }}>  delete</i></a></li> */}
+
+                                        {passengers.map((passenger, index) => (
+                                            <li key={index} className={`mbooking-${index + 1}`}>
+                                                <a href="/mbook" style={{ display: 'flex' }}>
+                                                    <span style={{ marginTop: 0, marginRight: -2, fontSize: 12 }}>
+                                                        Passenger: {passenger.passengerNumber}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    </span>
+                                                    <i className="material-icons" style={{ fontSize: 18 }}>delete</i>
+                                                </a>
+                                            </li>
+                                        ))}
+                                        <li className={props.gbooking}><a href="/gbook">On Behalf Booking</a></li>
+                                        <li className={props.gbooking}><a href="/gbook">Guest Booking</a></li>
+                                    </ul>
+                                    {/* </li> */}
+
+                                </span>
+                            </span>
+                        </div>
+
+
+
                         <div className="form-container">
 
-                            <div className="left-side">
+                            <div className="left-side wow fadeInLeft" data-wow-duration="2s" data-wow-delay="1.8s">
                                 <img src={taxi} style={{ marginTop: -50 }} alt="team meeting" />
+                                {/* <div className="animation-container-form">
+                                    <DotLottieReact
+                                        src="/animations/animation3.lottie"
+                                        loop
+                                        autoplay
+                                    />
+                                </div> */}
                             </div>
 
-                            <div className="right-side"><br></br>
+                            <div className="right-side wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.2s"><br></br>
                                 {currentSection === 1 && (
                                     <form>
-                                        <div className="form-test">
+
+                                        <div className="form-test wow fadeIn" data-wow-duration="2s" data-wow-delay="1.6s">
+                                            <div className="form-group-t">
+                                                <label htmlFor="timeOfExpense">Name *</label>
+                                                <input
+                                                    type="text"
+                                                    id="timeOfExpense" className='input-t'
+                                                    placeholder="e.g. New Delhi"
+                                                    value={formData.timeOfExpense}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+
+                                            </div>
+                                            <div className="form-group-t">
+                                                <label htmlFor="timeOfExpense">Designation *</label>
+                                                <input
+                                                    type="text"
+                                                    id="timeOfExpense" className='input-t'
+                                                    placeholder="e.g. Gurugram"
+                                                    value={formData.timeOfExpense}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="form-test wow fadeIn" data-wow-duration="2s" data-wow-delay="1.6s">
+                                            <div className="form-group-t">
+                                                <label htmlFor="timeOfExpense">Mobile *</label>
+                                                <input
+                                                    type="text"
+                                                    id="timeOfExpense" className='input-t'
+                                                    placeholder="e.g. New Delhi"
+                                                    value={formData.timeOfExpense}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+
+                                            </div>
+                                            <div className="form-group-t">
+                                                <label htmlFor="timeOfExpense">Company Name *</label>
+                                                <input
+                                                    type="text"
+                                                    id="timeOfExpense" className='input-t'
+                                                    placeholder="e.g. Gurugram"
+                                                    value={formData.timeOfExpense}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="form-group wow fadeIn" data-wow-duration="2s" data-wow-delay="1.0s">
+                                            <label htmlFor="currency">Approver Name *</label>
+                                            <input
+                                                type="text"
+                                                id="dateOfExpense" className='input-t' readOnly
+                                                placeholder="e.g. Arun Kumar Vasistha"
+                                                value={formData.dateOfExpense}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-group wow fadeIn" data-wow-duration="2s" data-wow-delay="0.6s">
+                                            <label htmlFor="amount">Purpose of Visit *</label>
+                                            <input className='input-t'
+                                                type="text"
+                                                id="amount"
+                                                value={formData.amount}
+                                                onChange={handleInputChange}
+                                                placeholder="e.g. Business Meeting"
+                                                required
+                                            />
+                                        </div>
+
+
+                                        <div className="button-group wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
+                                            <button type="button" id='successButton' onClick={handleNextSection}>
+                                                Submit
+                                            </button>
+                                            <button type="button" id="addButton" onClick={handleNextSection}>
+                                                Add Passenger
+                                            </button>
+
+                                        </div>
+                                    </form>
+                                )}
+
+
+                                {/* Section 2 */}
+                                {currentSection === 2 && (
+                                    <form>
+
+                                        <div className="form-test wow fadeIn" data-wow-duration="2s" data-wow-delay="1.6s">
                                             <div className="form-group-t">
                                                 <label htmlFor="timeOfExpense">Pickup Point *</label>
                                                 <input
@@ -105,7 +276,7 @@ const GBookingForm = (props) => {
                                         </div>
 
 
-                                        <div className="form-test">
+                                        <div className="form-test wow fadeIn" data-wow-duration="2s" data-wow-delay="1.4s">
                                             <div className="form-group-t">
                                                 <label htmlFor="timeOfExpense">Waypoints</label>
                                                 <input
@@ -143,7 +314,7 @@ const GBookingForm = (props) => {
                                                 required
                                             />
                                         </div> */}
-                                        <div className="form-test">
+                                        <div className="form-test wow fadeIn" data-wow-duration="2s" data-wow-delay="1.2s">
                                             <div className="form-group-t">
                                                 <label htmlFor="timeOfExpense">Choose Taxi *</label>
 
@@ -170,19 +341,9 @@ const GBookingForm = (props) => {
 
                                         </div>
 
-                                        <div className="form-group">
-                                            <label htmlFor="currency">Approver Name *</label>
-                                            <input
-                                                type="text"
-                                                id="dateOfExpense" className='input-t' readOnly
-                                                placeholder="e.g. Arun Kumar Vasistha"
-                                                value={formData.dateOfExpense}
-                                                onChange={handleInputChange}
-                                                required
-                                            />
-                                        </div>
 
-                                        <div className="form-test">
+
+                                        <div className="form-test wow fadeIn" data-wow-duration="2s" data-wow-delay="0.8s">
                                             <div className="form-group-t">
                                                 <label htmlFor="timeOfExpense">Departure Time *</label>
                                                 <input
@@ -207,20 +368,11 @@ const GBookingForm = (props) => {
 
 
                                         </div>
-                                        <div className="form-group">
-                                            <label htmlFor="amount">Purpose of Visit *</label>
-                                            <input className='input-t'
-                                                type="text"
-                                                id="amount"
-                                                value={formData.amount}
-                                                onChange={handleInputChange}
-                                                placeholder="e.g. Business Meeting"
-                                                required
-                                            />
-                                        </div>
 
 
-                                        <div className="button-group">
+
+
+                                        <div className="button-group wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
                                             <button type="button" id='successButton' onClick={handleNextSection}>
                                                 Submit
                                             </button>
@@ -232,66 +384,167 @@ const GBookingForm = (props) => {
                                     </form>
                                 )}
 
-                                {/* Section 2 */}
-                                {currentSection === 2 && (
-                                    <form>
-                                        {Array.from({ length: statusCount }, (_, index) => (
-                                            <div key={index}>
-                                            <div className="form-test" >
-                                                <div className="form-group-t">
-                                                    <label htmlFor={`staffNo-${index}`}>Staff No. *</label>
-                                                    <input
-                                                        type="text"
-                                                        id={`staffNo-${index}`}
-                                                        className="input-t"
-                                                        placeholder="e.g. Shashank Trivedi"
-                                                        value={formData[`staffNo-${index}`] || ''}
-                                                        onChange={(e) => handleInputChange(e, index, 'staffNo')}
-                                                        required
-                                                    />
-                                                </div>
-                                                <div className="form-group-t">
-                                                    <label htmlFor={`employeeName-${index}`}>Employee Name *</label>
-                                                    <input
-                                                        type="text"
-                                                        id={`employeeName-${index}`}
-                                                        className="input-t"
-                                                        placeholder="e.g. 8005205383"
-                                                        value={formData[`employeeName-${index}`] || ''}
-                                                        onChange={(e) => handleInputChange(e, index, 'employeeName')}
-                                                        required
-                                                    />
-                                                </div>
-                                                </div>
-                                                <div className="form-test">
-                                                <div className="form-group-t">
-                                                    <label htmlFor={`destination-${index}`}>Destination</label>
-                                                    <input
-                                                        type="text"
-                                                        id={`destination-${index}`}
-                                                        className="input-t"
-                                                        placeholder="e.g. Jigyasu"
-                                                        value={formData[`destination-${index}`] || ''}
-                                                        onChange={(e) => handleInputChange(e, index, 'destination')}
-                                                        required
-                                                    />
-                                                </div>
-                                                <div className="form-group-t">
-                                                    <label htmlFor={`mobileNo-${index}`}>Mobile No.</label>
-                                                    <input
-                                                        type="number"
-                                                        id={`mobileNo-${index}`}
-                                                        className="input-t"
-                                                        placeholder="e.g. 1234567890"
-                                                        value={formData[`mobileNo-${index}`] || ''}
-                                                        onChange={(e) => handleInputChange(e, index, 'mobileNo')}
-                                                        required
-                                                    />
-                                                </div>
-                                                </div>
-                                                </div>
-                                        ))}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                {/* Section 2 */}
+                                {(currentSection === 3) && (passengers.length !== 0) && (
+                                    <form>
+                                        <div className="form-test">
+                                            <div className="form-group-t">
+                                                <label htmlFor="timeOfExpense">Co-Passenger Name</label>
+                                                <input
+                                                    type="text"
+                                                    id="timeOfExpense" className='input-t'
+                                                    placeholder="e.g. Jigyasu"
+                                                    value={formData.timeOfExpense}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+
+                                            </div>
+                                            <div className="form-group-t">
+                                                <label htmlFor="timeOfExpense">Co-Passenger Mobile No.</label>
+                                                <input
+                                                    type="number"
+                                                    id="timeOfExpense" className='input-t'
+                                                    placeholder="e.g. 1234567890"
+                                                    value={formData.timeOfExpense}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+                                            </div>
+
+
+                                        </div>
+                                        <div className="form-test">
+                                            <div className="form-group-t">
+                                                <label htmlFor="timeOfExpense">Co-Passenger Name</label>
+                                                <input
+                                                    type="text"
+                                                    id="timeOfExpense" className='input-t'
+                                                    placeholder="e.g. Jigyasu"
+                                                    value={formData.timeOfExpense}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+
+                                            </div>
+                                            <div className="form-group-t">
+                                                <label htmlFor="timeOfExpense">Co-Passenger Mobile No.</label>
+                                                <input
+                                                    type="number"
+                                                    id="timeOfExpense" className='input-t'
+                                                    placeholder="e.g. 1234567890"
+                                                    value={formData.timeOfExpense}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+                                            </div>
+
+
+                                        </div>
+                                        <div className="form-test">
+                                            <div className="form-group-t">
+                                                <label htmlFor="timeOfExpense">Co-Passenger Name</label>
+                                                <input
+                                                    type="text"
+                                                    id="timeOfExpense" className='input-t'
+                                                    placeholder="e.g. Jigyasu"
+                                                    value={formData.timeOfExpense}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+
+                                            </div>
+                                            <div className="form-group-t">
+                                                <label htmlFor="timeOfExpense">Co-Passenger Mobile No.</label>
+                                                <input
+                                                    type="number"
+                                                    id="timeOfExpense" className='input-t'
+                                                    placeholder="e.g. 1234567890"
+                                                    value={formData.timeOfExpense}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+                                            </div>
+
+
+                                        </div>
+                                        <div className="form-test">
+                                            <div className="form-group-t">
+                                                <label htmlFor="timeOfExpense">Co-Passenger Name</label>
+                                                <input
+                                                    type="text"
+                                                    id="timeOfExpense" className='input-t'
+                                                    placeholder="e.g. Jigyasu"
+                                                    value={formData.timeOfExpense}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+
+                                            </div>
+                                            <div className="form-group-t">
+                                                <label htmlFor="timeOfExpense">Co-Passenger Mobile No.</label>
+                                                <input
+                                                    type="number"
+                                                    id="timeOfExpense" className='input-t'
+                                                    placeholder="e.g. 1234567890"
+                                                    value={formData.timeOfExpense}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+                                            </div>
+
+
+                                        </div>
                                         <div className="button-group">
                                             <button type="button" id="successButton" onClick={handleSubmit}>
                                                 Submit
@@ -301,6 +554,16 @@ const GBookingForm = (props) => {
                                             </button>
                                         </div>
                                     </form>
+                                )}
+
+                                {(currentSection === 3) && (passengers.length === 0) && (
+                                    <div className="animation-container-form">
+                                        <DotLottieReact className='ani'
+                                            src="/animations/animation2.lottie"
+                                            loop
+                                            autoplay
+                                        />
+                                    </div>
                                 )}
 
                             </div>

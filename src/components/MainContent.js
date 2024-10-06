@@ -1,7 +1,8 @@
 import React from 'react';
 import taxi from '../assets/images/taxi.png';
 
- // Add any necessary CSS file for styles
+
+// Add any necessary CSS file for styles
 
 const MainContent = () => {
   return (
@@ -16,18 +17,19 @@ const MainContent = () => {
                   <h6>Welcome to Taxi Rental System</h6>
                   <h2>Reliable  <em>Rides,</em> &amp; <span>Anytime,</span> Anywhere</h2>
                   <p>
-                  This taxi rental system is exclusively developed for MSIL, ensuring efficient and reliable transportation tailored to our business needs.
+                    This taxi rental system is exclusively developed for MSIL, ensuring efficient and reliable transportation tailored to our business needs.
                     {/* <a rel="nofollow" href="https://templatemo.com/page/1" target="_parent">TemplateMo</a>. */}
+
                   </p>
                   <form id="search" action="#" method="GET">
                     <fieldset>
-                      <input 
-                        type="text" 
-                        name="address" 
-                        className="email" 
-                        placeholder="Your website URL..." 
-                        autoComplete="on" 
-                        required 
+                      <input
+                        type="text"
+                        name="address"
+                        className="email"
+                        placeholder="Your website URL..."
+                        autoComplete="on"
+                        required
                       />
                     </fieldset>
                     <fieldset>
@@ -38,7 +40,7 @@ const MainContent = () => {
               </div>
 
               {/* Right Image */}
-              <div className="col-lg-6" style={{marginTop:-80}}>
+              <div className="col-lg-6" style={{ marginTop: -80 }}>
                 <div className="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
                   <img src={taxi} alt="team meeting" />
                 </div>

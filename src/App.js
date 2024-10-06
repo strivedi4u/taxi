@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './assets/css/style.css';
 import './assets/css/animated.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -16,7 +16,22 @@ import Profile from './pages/Profile';
 import GBooking from './pages/GBooking';
 import MBooking from './pages/MBooking';
 import VRequest from './pages/VRequest';
+
+import { WOW } from 'wowjs';
+import 'animate.css'; // Import the animation CSS
+
+ 
 const App = () => {
+  useEffect(() => {
+    const wow = new WOW({
+      boxClass: 'wow', // Class for WOW.js to apply animations
+      animateClass: 'animated', // Class for animations
+      offset: 0, // Offset to trigger animations
+      mobile: true, // Enable animations on mobile
+      live: true, // Continuously check for newly added elements
+    });
+    wow.init();
+  }, []);
   return (
     <>
     {/* <Navbar /> */}
