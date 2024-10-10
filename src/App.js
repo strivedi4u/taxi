@@ -19,6 +19,7 @@ import VRequest from './pages/VRequest';
 
 import { WOW } from 'wowjs';
 import 'animate.css'; // Import the animation CSS
+import TestLogin from './pages/TestLogin';
 
  
 const App = () => {
@@ -48,6 +49,7 @@ const App = () => {
           <Route exact path="/request" element={<Request />} />
           <Route exact path="/view" element={<View />} />
           <Route exact path="/view1" element={<View1 />} />
+          <Route exact path="/login" element={<TestLogin />} />
         </Routes>
       </BrowserRouter>
 
