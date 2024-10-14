@@ -22,6 +22,7 @@ const TestBookingForm = ({ emplId }, {emplName}) => {
             { passengerNumber: prevPassengers.length + 1, details: {} }
         ]);
         setSelectedPassengerIndex(1);
+        
         ++selectedPassengerIndex;
     };
 
