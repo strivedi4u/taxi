@@ -7,32 +7,42 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import '../assets/css/form.css';
 import taxi from '../assets/images/taxi.png';
 
-const MBookingForm = ({ emplId }, {emplName}) => {
+const TestBookingForm = ({ emplId }, {emplName}) => {
     const navigate = useNavigate();
-
-    const [UserName, setUserName] = useState(localStorage.getItem('UserName'));
-    const [authToken, setAuthToken] = useState(localStorage.getItem('token'));
-
-    // const [emplId, setEmplId] = useState();
-    // const [emplName, setEmplName] = useState();
 
     const [passengers, setPassengers] = useState([]);
     console.log(passengers)
     console.log(passengers.length)
     const [currentSection, setCurrentSection] = useState(1);
-
-    const URL = process.env.REACT_APP_API_URL;
-    const API = URL + '/Services/GetEmployeeProfile';
-    // Initialize the state with the default values for controlled inputs
-
-    // Function to handle adding a new passenger
+    var [selectedPassengerIndex, setSelectedPassengerIndex] = useState(null);
+    const [passengerDetails, setPassengerDetails] = useState({});
     const addPassenger = () => {
         setPassengers(prevPassengers => [
             ...prevPassengers,
-            { passengerNumber: prevPassengers.length + 1 }
+            { passengerNumber: prevPassengers.length + 1, details: {} }
         ]);
+        setSelectedPassengerIndex(1);
+        ++selectedPassengerIndex;
     };
 
+    const deletePassenger = (index) => {
+        const updatedPassengers = passengers.filter((_, i) => i !== index);
+        setPassengers(updatedPassengers);
+        if (selectedPassengerIndex === index) {
+            setSelectedPassengerIndex(null); // Clear selected passenger if deleted
+        }
+    };
+
+    const handlePassengerDetailChange = (index, e) => {
+        const { name, value } = e.target;
+        setPassengerDetails(prevDetails => ({
+            ...prevDetails,
+            [index]: {
+                ...prevDetails[index],
+                [name]: value
+            }
+        }));
+    };
     const handleSetSection = (e) => {
         // e.preventDefault(); 
         setCurrentSection(e);
@@ -40,54 +50,9 @@ const MBookingForm = ({ emplId }, {emplName}) => {
 
 
 
-    const [formData, setFormData] = useState({
-        expenseType: '',
-        amount: '',
-        currency: 'INR',
-        spentAt: '',
-        description: '',
-        cityName: '',
-        category: '',
-        dateOfExpense: '',
-        timeOfExpense: '',
-    });
-
+  
 
     var [statusCount, setStatusCount] = useState(0);
-
-
-//     useEffect(() => {
-//     const handleEmployeeSearch = async ()=> {
-//         console.log('Employee Search Call');
-//         console.log(authToken);
-//         axios.post(API, {
-//             UserName: decryptData(UserName)
-//         }, {
-//             headers: {
-//                 "authToken": authToken
-//             }
-//         })
-//             .then((response) => {
-//                 if (response.status === 200) {
-//                     console.log("Hello ", response);
-//                     console.log("Hello ", response);
-//                     setEmplId(decryptData(response.data.Value.Table1[0].EMPL_ID));
-//                     setEmplName(decryptData(response.data.Value.Table1[0].EMPL_NAME));
-//                     // setProfilePhoto(response.data.Value.Table1[0].profile_photo);
-//                     // swal("Good job!", "Successfully saved", "success");
-//                 } else {
-//                     swal("Unfortunately!", "Unsuccessfully saved", "error");
-//                 }
-//             })
-//             .catch((error) => {
-//                 console.log(error);
-//                 swal("Unfortunately!", error.response.data.error, "error");
-//             });
-
-//     };
-//     handleEmployeeSearch();
-//     //   }
-// }, [API, authToken, UserName]);
 
     const handleStatusCount = (e) => {
         console.log(statusCount);
@@ -99,7 +64,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
 
     const handleInputChange = (e) => {
         const { id, value } = e.target;
-        setFormData({ ...formData, [id]: value });
+        // setFormData({ ...formData, [id]: value });
     };
 
     const handleNextSection = (e) => {
@@ -107,20 +72,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
         handleStatusCount();
     };
 
-    const handleReset = () => {
-        setFormData({
-            expenseType: '',
-            amount: '',
-            currency: 'INR',
-            spentAt: '',
-            description: '',
-            cityName: '',
-            category: '',
-            dateOfExpense: '',
-            timeOfExpense: '',
-        });
-        setCurrentSection(1);
-    };
+    
 
     const handleSubmit = () => {
         swal("Congratulations 🎉", "Taxi has been booked successfully", "success");
@@ -167,11 +119,17 @@ const MBookingForm = ({ emplId }, {emplName}) => {
 
                                         {passengers.map((passenger, index) => (
                                             <li key={index} className={`mbooking-${index + 1}`}>
-                                                <a href="/mbook" style={{ display: 'flex' }}>
+                                                <a style={{ display: 'flex' }}>
                                                     <span style={{ marginTop: 0, marginRight: -2, fontSize: 12 }}>
                                                         Passenger: {passenger.passengerNumber}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                     </span>
-                                                    <i className="material-icons" style={{ fontSize: 18 }}>delete</i>
+                                                    <i 
+                                                        className="material-icons" 
+                                                        style={{ fontSize: 18 }} 
+                                                        onClick={() => deletePassenger(index)} // Add click handler here
+                                                    >
+                                                        delete
+                                                    </i>
                                                 </a>
                                             </li>
                                         ))}
@@ -225,7 +183,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="text"
                                                     id="timeOfExpense" className='input-t'
                                                     placeholder="e.g. Gurugram"
-                                                    value={formData.timeOfExpense}
+                                                    // value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -239,7 +197,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="text"
                                                     id="timeOfExpense" className='input-t'
                                                     placeholder="e.g. New Delhi"
-                                                    value={formData.timeOfExpense}
+                                                    // value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -251,7 +209,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="text"
                                                     id="timeOfExpense" className='input-t'
                                                     placeholder="e.g. Gurugram"
-                                                    value={formData.timeOfExpense}
+                                                    // value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -263,7 +221,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                 type="text"
                                                 id="dateOfExpense" className='input-t' readOnly
                                                 placeholder="e.g. Arun Kumar Vasistha"
-                                                value={formData.dateOfExpense}
+                                                // value={formData.dateOfExpense}
                                                 onChange={handleInputChange}
                                                 required
                                             />
@@ -273,7 +231,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                             <input className='input-t'
                                                 type="text"
                                                 id="amount"
-                                                value={formData.amount}
+                                                // value={formData.amount}
                                                 onChange={handleInputChange}
                                                 placeholder="e.g. Business Meeting"
                                                 required
@@ -305,7 +263,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="text"
                                                     id="timeOfExpense" className='input-t'
                                                     placeholder="e.g. New Delhi"
-                                                    value={formData.timeOfExpense}
+                                                    // value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -317,7 +275,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="text"
                                                     id="timeOfExpense" className='input-t'
                                                     placeholder="e.g. Gurugram"
-                                                    value={formData.timeOfExpense}
+                                                    // value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -332,7 +290,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="text"
                                                     id="timeOfExpense" className='input-t'
                                                     placeholder="e.g. Redfort"
-                                                    value={formData.timeOfExpense}
+                                                    // value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -344,7 +302,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="number"
                                                     id="timeOfExpense" className='input-t' readOnly
                                                     placeholder="e.g. 20"
-                                                    value={formData.timeOfExpense}
+                                                    // value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -367,7 +325,9 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                             <div className="form-group-t">
                                                 <label htmlFor="timeOfExpense">Choose Taxi *</label>
 
-                                                <select id="currency" className='select-t' value={formData.currency} onChange={handleInputChange}>
+                                                <select id="currency" className='select-t'
+                                                //  value={formData.currency}
+                                                  onChange={handleInputChange}>
                                                     <option value="Dzire">Dzire</option>
                                                     <option value="Swift">Swift</option>
                                                     <option value="Baleno">Baleno</option>
@@ -381,7 +341,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="number"
                                                     id="timeOfExpense" className='input-t' readOnly
                                                     placeholder="e.g. 8723"
-                                                    value={formData.timeOfExpense}
+                                                    // value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -398,7 +358,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                 <input
                                                     type="datetime-local"
                                                     id="timeOfExpense" className='input-t'
-                                                    value={formData.timeOfExpense}
+                                                    // value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -409,7 +369,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                 <input
                                                     type="datetime-local"
                                                     id="timeOfExpense" className='input-t'
-                                                    value={formData.timeOfExpense}
+                                                    // value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -484,8 +444,13 @@ const MBookingForm = ({ emplId }, {emplName}) => {
 
 
                                 {/* Section 2 */}
-                                {(currentSection === 3) && (passengers.length !== 0) && (
-                                    <form>
+                                {currentSection === 3 && (
+                                    <div>
+                                        <h4>Passenger Details</h4>
+                                        {selectedPassengerIndex !== null ? (
+                                            <div>
+                                                <h5>Passenger {selectedPassengerIndex + 1} Details</h5>
+                                                <form>
                                         <div className="form-test">
                                             <div className="form-group-t">
                                                 <label htmlFor="timeOfExpense">Co-Passenger Name</label>
@@ -493,7 +458,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="text"
                                                     id="timeOfExpense" className='input-t'
                                                     placeholder="e.g. Jigyasu"
-                                                    value={formData.timeOfExpense}
+                                              //      value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -505,7 +470,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="number"
                                                     id="timeOfExpense" className='input-t'
                                                     placeholder="e.g. 1234567890"
-                                                    value={formData.timeOfExpense}
+                                              //      value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -520,7 +485,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="text"
                                                     id="timeOfExpense" className='input-t'
                                                     placeholder="e.g. Jigyasu"
-                                                    value={formData.timeOfExpense}
+                                              //      value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -532,7 +497,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="number"
                                                     id="timeOfExpense" className='input-t'
                                                     placeholder="e.g. 1234567890"
-                                                    value={formData.timeOfExpense}
+                                              //      value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -547,7 +512,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="text"
                                                     id="timeOfExpense" className='input-t'
                                                     placeholder="e.g. Jigyasu"
-                                                    value={formData.timeOfExpense}
+                                              //      value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -559,7 +524,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="number"
                                                     id="timeOfExpense" className='input-t'
                                                     placeholder="e.g. 1234567890"
-                                                    value={formData.timeOfExpense}
+                                              //      value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -574,7 +539,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="text"
                                                     id="timeOfExpense" className='input-t'
                                                     placeholder="e.g. Jigyasu"
-                                                    value={formData.timeOfExpense}
+                                              //      value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -586,7 +551,7 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                                     type="number"
                                                     id="timeOfExpense" className='input-t'
                                                     placeholder="e.g. 1234567890"
-                                                    value={formData.timeOfExpense}
+                                              //      value={formData.timeOfExpense}
                                                     onChange={handleInputChange}
                                                     required
                                                 />
@@ -603,6 +568,12 @@ const MBookingForm = ({ emplId }, {emplName}) => {
                                             </button>
                                         </div>
                                     </form>
+                                            </div>
+                                        ) : (
+                                            <p>Please select a passenger to view details.</p>
+                                        )}
+                                        <button onClick={handleSubmit}>Submit</button>
+                                    </div>
                                 )}
 
                                 {(currentSection === 3) && (passengers.length === 0) && (
@@ -621,4 +592,4 @@ const MBookingForm = ({ emplId }, {emplName}) => {
     );
 };
 
-export default MBookingForm;
+export default TestBookingForm;

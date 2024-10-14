@@ -1,16 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { decryptData } from '../utils/encryption';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import swal from 'sweetalert';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import '../assets/css/form.css';
 import taxi from '../assets/images/taxi.png';
 
-const GBookingForm = (props) => {
+const GBookingForm = () => {
     const navigate = useNavigate();
+
+    const [UserName, setUserName] = useState(localStorage.getItem('UserName'));
+    const [authToken, setAuthToken] = useState(localStorage.getItem('token'));
+
+    const [onbehalfEmplId, setOnbehalfEmplId] = useState();
+    const [emplId, setEmplId] = useState();
+    const [emplName, setEmplName] = useState();
+
     const [passengers, setPassengers] = useState([]);
     console.log(passengers)
     console.log(passengers.length)
     const [currentSection, setCurrentSection] = useState(1);
+
+    const URL = process.env.REACT_APP_API_URL;
+    const API = URL + '/Services/GetEmployeeProfile';
+    // Initialize the state with the default values for controlled inputs
 
     // Function to handle adding a new passenger
     const addPassenger = () => {
@@ -41,6 +55,37 @@ const GBookingForm = (props) => {
 
 
     var [statusCount, setStatusCount] = useState(0);
+
+
+
+    const handleEmployeeSearch =  ()=> {
+        console.log('Employee Search Call');
+        console.log(authToken);
+        axios.post(API, {
+            UserName: decryptData(UserName)
+        }, {
+            headers: {
+                "authToken": authToken
+            }
+        })
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log("Hello ", response);
+                    console.log("Hello ", response);
+                    setEmplId(decryptData(response.data.Value.Table1[0].EMPL_ID));
+                    setEmplName(decryptData(response.data.Value.Table1[0].EMPL_NAME));
+                    // setProfilePhoto(response.data.Value.Table1[0].profile_photo);
+                    // swal("Good job!", "Successfully saved", "success");
+                } else {
+                    swal("Unfortunately!", "Unsuccessfully saved", "error");
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                swal("Unfortunately!", error.response.data.error, "error");
+            });
+
+    };
 
 
     const handleStatusCount = (e) => {
@@ -112,7 +157,7 @@ const GBookingForm = (props) => {
                                     </span>
 
                                     <ul className="dropdown-menu" style={{ marginLeft: 12 }}>
-                                        <li className={props.mbooking} onClick={addPassenger}><a style={{ display: 'flex' }}> <span style={{ marginTop: 0, fontSize: 12 }}>Add Passenger &nbsp;&nbsp; &nbsp; &nbsp;  </span>
+                                        <li  onClick={addPassenger}><a style={{ display: 'flex' }}> <span style={{ marginTop: 0, fontSize: 12 }}>Add Passenger &nbsp;&nbsp; &nbsp; &nbsp;  </span>
                                             <i className="material-icons" style={{ fontSize: 18 }}>  add_circle</i></a></li>
 
 
@@ -129,8 +174,8 @@ const GBookingForm = (props) => {
                                                 </a>
                                             </li>
                                         ))}
-                                        <li className={props.gbooking}><a href="/gbook">On Behalf Booking</a></li>
-                                        <li className={props.gbooking}><a href="/gbook">Guest Booking</a></li>
+                                        {/* <li className={props.gbooking}><a href="/gbook">On Behalf Booking</a></li>
+                                        <li className={props.gbooking}><a href="/gbook">Guest Booking</a></li> */}
                                     </ul>
                                     {/* </li> */}
 
@@ -158,18 +203,39 @@ const GBookingForm = (props) => {
                                     <form>
 
                                         <div className="form-test wow fadeIn" data-wow-duration="2s" data-wow-delay="1.6s">
-                                            <div className="form-group-t">
-                                                <label htmlFor="timeOfExpense">Name *</label>
-                                                <input
-                                                    type="text"
-                                                    id="timeOfExpense" className='input-t'
-                                                    placeholder="e.g. New Delhi"
-                                                    value={formData.timeOfExpense}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                />
 
+
+                                            <div className="form-group-t">
+                                            <label htmlFor="timeOfExpense">Staff No. *</label>
+                                            <div style={{ position: 'relative', display: 'inline-block' }}>
+                                                    <input
+                                                        type="number"
+                                                        className="input-t"
+                                                        placeholder="Enter Employee Id"
+                                                        onChange={e => setOnbehalfEmplId(e.target.value)} maxLength={6}
+                                                        style={{ paddingRight: '50px' }} required // Adjust padding to prevent text from overlapping the icon
+                                                    />
+                                                    {/* Submit Icon */}
+                                                    <i
+                                                        className="fa fa-arrow-circle-right" // FontAwesome icon (or use an image <img src="..."/>)
+                                                        style={{
+                                                            position: 'absolute',
+                                                            right: '15px',
+                                                            top: '50%',
+                                                            fontSize: 18,
+                                                            transform: 'translateY(-50%)',
+                                                            cursor: 'pointer',
+                                                            color: '#888' // Change the color as per your design
+                                                        }}
+                                                        send
+                                                        onClick={handleEmployeeSearch} // Call the function when the icon is clicked
+                                                    />
+                                                </div>
                                             </div>
+
+
+
+
                                             <div className="form-group-t">
                                                 <label htmlFor="timeOfExpense">Designation *</label>
                                                 <input

@@ -1,141 +1,128 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../assets/css/navbar.css';
+import swal from 'sweetalert';
 import logo from '../assets/images/logo.jpg';
 import axios from 'axios';
-const Navbar = (props) => {
+import { decryptData } from '../utils/encryption';
+import Preloader from './Preloader';
+
+const Navbar = ({ setEmplId, setEmplName, emplId, emplName, home, mbooking, gbooking, vrequest, uManuals, profile }) => {
+    console.log(emplId, emplName)
+    const URL = process.env.REACT_APP_API_URL;
+    const API = `${URL}/Services/GetEmployeeProfile`;
+
+    const [UserName, setUserName] = useState(localStorage.getItem('UserName'));
+    const [authToken, setAuthToken] = useState(localStorage.getItem('token'));
+    const [profilePhoto, setProfilePhoto] = useState('');
     const [isCollapsed, setIsCollapsed] = useState(true);
+
+    const handleLogout = () => {
+        localStorage.clear();
+        window.location.href = '/login';
+    }
+
     const toggleNavbar = () => {
         setIsCollapsed(!isCollapsed);
     };
+
+    useEffect(() => {
+        if (!UserName || !authToken) {
+            window.location.href = '/login';
+        }
+    }, [UserName, authToken]);
+
     useEffect(() => {
         const fetchData = async () => {
-            const apiUrl = process.env.REACT_APP_API_URL;
-            console.log('API URL:', apiUrl);
             try {
-                const response = await axios.post(
-                    process.env.REACT_APP_API_URL + '/hrassist/api/Services/GetEmplyeeProfile',
-                    // Replace with your API endpoint
-                    {
-                        body: localStorage.getItem('UserName'),  // This is the body parameter you're passing
-                    },
-                    {
-                        headers: {
-                            'Authorization': localStorage.getItem('authToken'),  // Authorization header with token
-                            'Content-Type': 'application/json',  // Adjust headers as needed
-                        },
-                    }
-                );
-                console.log(response.data);
-            } catch (err) {
-                console.error("API call error:", err);
+                let decryptUserName = decryptData(UserName);
+                const response = await axios.post(API, { UserName: decryptUserName }, {
+                    headers: { "authToken": authToken }
+                });
+
+                // Log the entire response object to check the structure
+                console.log('API Response:', response);
+
+                if (response.status === 200 && response.data?.Value?.Table1?.[0]) {
+                    const userData = response.data.Value.Table1[0];
+                    console.log("User Data: ", userData);
+                    setEmplId(decryptData(userData.EMPL_ID)); // No decryption needed if it's plaintext
+                    setEmplName(decryptData(userData.EMPL_NAME));
+                    setProfilePhoto(userData.profile_photo);
+                } else {
+                    swal("Error", "Data fetch was unsuccessful", "error");
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                swal("Error", "An error occurred while fetching the profile", "error");
             }
         };
 
-        // Only call fetchData if the parameter is available
-        //   if (parameter) {
         fetchData();
-        //   }
-    }, []);
-
-
+    }, [API, authToken, UserName, setEmplId, setEmplName]);
 
     return (
-
-        <nav className="navbar wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
-            <div className="navbar-header">
-                <a className="navbar-brand" href="#">
-                    <span><img src={logo} /></span><span>&nbsp;&nbsp;&nbsp;Taxi Rental<b> System</b></span>
-                </a>
-                <button
-                    type="button"
-                    data-target="#navbarCollapse"
-                    data-toggle="collapse"
-                    className="navbar-toggle"
-                    onClick={toggleNavbar}
-                >
-                    <span className="navbar-toggler-icon"></span>
-                    <span className="icon-bar"></span>
-                    <span className="icon-bar"></span>
-                    <span className="icon-bar"></span>
-                </button>
-            </div>
-
-            <div id="navbarCollapse" className={`collapse navbar-collapse ${!isCollapsed ? 'in' : ''}`}>
-                <ul className="nav navbar-nav">
-                    <li className={props.home}><a href="/">Home</a></li>
-
-                    <li className="dropdown">
-                        <a
-                            data-toggle="dropdown"
-                            className="dropdown-toggle"
-                            href="#"
+        <>
+            {emplId ? (
+                <nav className="navbar wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+                    <div className="navbar-header">
+                        <a className="navbar-brand" href="#">
+                            <span><img src={logo} alt="Logo" /></span>
+                            <span>&nbsp;&nbsp;&nbsp;Taxi Rental<b> System</b></span>
+                        </a>
+                        <button
+                            type="button"
+                            data-target="#navbarCollapse"
+                            data-toggle="collapse"
+                            className="navbar-toggle"
+                            onClick={toggleNavbar}
                         >
-                            Booking <b className="caret"></b>
-                        </a>
-                        <ul className="dropdown-menu">
-                            <li className={props.mbooking}><a href="/mbook">Self Booking</a></li>
-                            <li className={props.gbooking}><a href="/gbook">On Behalf Booking</a></li>
-                            <li className={props.gbooking}><a href="/gbook">Guest Booking</a></li>
+                            <span className="navbar-toggler-icon"></span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
+                        </button>
+                    </div>
+
+                    <div id="navbarCollapse" className={`collapse navbar-collapse ${!isCollapsed ? 'in' : ''}`}>
+                        <ul className="nav navbar-nav">
+                            <li className={home}><a href="/">Home</a></li>
+                            <li className="dropdown">
+                                <a data-toggle="dropdown" className="dropdown-toggle" href="#">
+                                    Booking <b className="caret"></b>
+                                </a>
+                                <ul className="dropdown-menu">
+                                    <li className={mbooking}><a href="/mbook">Self Booking</a></li>
+                                    <li className={gbooking}><a href="/gbook">On Behalf Booking</a></li>
+                                    <li className={gbooking}><a href="/gbook">Guest Booking</a></li>
+                                </ul>
+                            </li>
+                            <li className={vrequest}><a href="/vrequest">View Request</a></li>
+                            <li className={uManuals}><a href="/">User Manuals</a></li>
                         </ul>
-                    </li>
-                    <li className={props.vrequest}><a href="/vrequest">View Request</a></li>
-                    <li className={props.uManuals}><a href="/">User Manuals</a></li>
-
-                    {/* <li><a href="#">Blog</a></li>
-                    <li><a href="#">Contact</a></li> */}
-                </ul>
-
-                {/* <form className="navbar-form form-inline">
-          <div className="input-group search-box">
-            <input 
-              type="text" 
-              id="search" 
-              className="form-control" 
-              placeholder="Search by Name" 
-            />
-            <span className="input-group-addon">
-              <i className="material-icons">&#xE8B6;</i>
-            </span>
-          </div>
-        </form> */}
-
-                <ul className="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="#" className="notifications">
-                            <i className="fa fa-bell-o"></i>
-                            <span className="badge">1</span>
-                        </a>
-                    </li>
-                    {/* <li>
-                        <a href="#" className="messages">
-                            <i className="fa fa-envelope-o"></i>
-                            <span className="badge">10</span>
-                        </a>
-                    </li> */}
-                    <li className={`${props.profile} dropdown`}>
-                        <a
-                            href="#"
-                            data-toggle="dropdown"
-                            className="dropdown-toggle user-action"
-                        >
-                            <img
-                                src="https://avatars.githubusercontent.com/u/81739538?v=4"
-                                className="avatar"
-                                alt="Avatar"
-                            />
-                            Shashank Trivedi <b className="caret"></b>
-                        </a>
-                        <ul className="dropdown-menu">
-                            <li><a href="/profile"><i className="fa fa-user-o"></i> Profile</a></li>
-                            {/* <li><a href="#"><i className="fa fa-calendar-o"></i> Calendar</a></li>
-              <li><a href="#"><i className="fa fa-sliders"></i> Settings</a></li> */}
-                            <li className="divider"></li>
-                            <li><a href="#"><i className="material-icons">&#xE8AC;</i> Logout</a></li>
+                        <ul className="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="#" className="notifications">
+                                    <i className="fa fa-bell-o"></i>
+                                    <span className="badge">1</span>
+                                </a>
+                            </li>
+                            <li className={`${profile} dropdown`}>
+                                <a href="#" data-toggle="dropdown" className="dropdown-toggle user-action">
+                                    <img src={profilePhoto} className="avatar" alt="Avatar" />
+                                    {emplName} <b className="caret"></b>
+                                </a>
+                                <ul className="dropdown-menu">
+                                    <li><a href="/profile"><i className="fa fa-user-o"></i> Profile</a></li>
+                                    <li className="divider"></li>
+                                    <li><a onClick={handleLogout}><i className="material-icons">&#xE8AC;</i> Logout</a></li>
+                                </ul>
+                            </li>
                         </ul>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+                    </div>
+                </nav>
+            ) : <Preloader />}
+        </>
     );
 };
 
